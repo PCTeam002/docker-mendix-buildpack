@@ -32,6 +32,11 @@ ARG USER_UID=1001
 # Copy start scripts
 COPY scripts/startup.py scripts/vcap_application.json /opt/mendix/build/
 
+RUN microdnf install -y dos2unix && \
+    find /opt/mendix/buildpack -name "*.py" -exec dos2unix {} \; && \
+    dos2unix /opt/mendix/build/startup.py && \
+    microdnf clean all
+
 # Each comment corresponds to the script line:
 # 1. Create cache directory and directory for dependencies which can be shared
 # 2. Set permissions for compilation scripts
